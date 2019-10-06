@@ -8,5 +8,19 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
+        stage('Biuld Docker Image') {
+            when{
+                branch 'master'
+            }
+            steps {
+                script {
+                    app = docker.build("mahsa-ba/train-schedule")
+                    app.inside {
+                        sh 'echo $(curl localhost:8080)'
+                    }
+                }
+            }
+            
+        }
     }
 }
